@@ -4,7 +4,12 @@ Created on Thu Aug  3 01:54:31 2023
 
 @author: mytzi
 """
-
+"""
+IMPORTANTE
+Este código lo comente desde que comence a correrlo para entender 
+lo que hacia, por lo cual, cuando entrene la red ya habia documentado el 
+código, por esto mismo, no hay modificaciones nuevas. 
+"""
 # %load network.py
 
 """
@@ -72,7 +77,7 @@ class Network(object): #clase conjunto de funciones
         for j in range(epochs): #
             random.shuffle(training_data) #desordena los datos para tomar una muestra aleatoria
             mini_batches = [
-                training_data[k:k+mini_batch_size] #agrupa los datos de e ntrenamiento en batches
+                training_data[k:k+mini_batch_size] #agrupa los datos de entrenamiento en batches
                 for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta) #actualizacion de w y b en cada batch
@@ -86,7 +91,7 @@ class Network(object): #clase conjunto de funciones
         gradient descent using backpropagation to a single mini batch.
         The ``mini_batch`` is a list of tuples ``(x, y)``, and ``eta``
         is the learning rate."""
-        nabla_b = [np.zeros(b.shape) for b in self.biases] #hacemos un vextor de ceros de bias y pesos para actualizarlo
+        nabla_b = [np.zeros(b.shape) for b in self.biases] #hacemos un vector de ceros de bias y pesos para actualizarlo
         nabla_w = [np.zeros(w.shape) for w in self.weights]
         for x, y in mini_batch:
             delta_nabla_b, delta_nabla_w = self.backprop(x, y) #entrenamiento y podemos ver que tanto varia la funcion de costo
@@ -132,7 +137,7 @@ class Network(object): #clase conjunto de funciones
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
 
-    def evaluate(self, test_data): #datos de prueba,
+    def evaluate(self, test_data): #datos de prueba
         """Return the number of test inputs for which the neural
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
