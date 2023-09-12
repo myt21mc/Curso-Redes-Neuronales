@@ -10,7 +10,7 @@ import gzip
 
 import numpy as np
  
-
+#
 #Se define una funcion que carga los datos de mnist y los segmenta en training, validation y test
 def load_data():
     f = gzip.open('mnist.pkl.gz', 'rb')

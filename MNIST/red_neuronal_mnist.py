@@ -12,7 +12,7 @@ lo que hacia, entonces, cuando entrene la red ya habia documentado el
 código, por esto mismo, no hay modificaciones nuevas.
 9 
 """
-
+#Mejoro un 1% en predicción 
 #### Libraries
 # Standard library
 import random
