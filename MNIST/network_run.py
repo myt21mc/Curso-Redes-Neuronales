@@ -25,4 +25,4 @@ net = red_neuronal_mnist.Network([784,30,10])
 
 #Entrenamos la red neuronal con el optimizador SGD usando 10 epocas, 2 mini batches 
 #y un learning rate de 3, al final evaluamos el modelo con test_data
-net.SGD( training_data, 10, 2, 3.0, test_data=test_data)
+net.SGD_momentum( training_data, 10, 2, 3.0, .82, test_data=test_data)
