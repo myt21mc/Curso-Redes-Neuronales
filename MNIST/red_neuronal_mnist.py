@@ -27,16 +27,20 @@ class Network(object): #clase conjunto de funciones
         self.sizes = sizes #aqui se define el tamaño de la red
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]] #se inicia los umbrales aleatoriamente y los pesos
         self.weights = [np.random.randn(y, x) #pesos, llega hasta penultima capa porquela ultima ya no tiene peso pero si umbrales
-                        for x, y in zip(sizes[:-1], sizes[1:])]
-
-    def feedforward(self, a): #self es la red y a es el dato de entrada
-        """Return the output of the network if ``a`` is input."""
+                        for x, y in zip(sizes[:-1], sizes[1:])] 
+        
+    def feedforward(self, a):
         for b, w in zip(self.biases, self.weights):
-            a = sigmoid(np.dot(w, a)+b) #ahora a es la funcion simoide, ie se actualiza b=bias
+            z = np.dot(w, a) + b
+            a = sigmoid(z) if w != self.weights[-1] else self.softmax(z) 
         return a
+    def softmax(self, z): 
+        exp_z = np.exp(z - np.max(z))  # Subtracting the max value for numerical stability 
+        return exp_z / exp_z.sum(axis=0, keepdims=True)
+    def cost_derivative(self, output_activations, y):
+        return output_activations - y  # This assumes y is a one-hot encoded vector
 
-
-
+# En este caso, la función softmax se aplicó en la capa de salida, por lo que output_activations representa las probabilidades.
     #Definimos una nueva función para el optimizador SGD con inercia 
     def SGD_momentum(self, training_data, epochs, mini_batch_size, eta, momentum,
             test_data=None):
@@ -125,7 +129,8 @@ class Network(object): #clase conjunto de funciones
             activation = sigmoid(z) #activacion ya redefinida con la funcion sigmoide
             activations.append(activation) #se guarda en la lista
         # backward pass
-    
+        
+        #Por aqui iria el softmax
         # Actualizamos el backprop (porque cambiamos la funcion de costo)
         
         delta = 1/len(activations)*self.cost_derivative(activations[-1], y) * \
@@ -158,4 +163,7 @@ def sigmoid(z):
 def sigmoid_prime(z):
     return sigmoid(z)*(1-sigmoid(z))
 
-
+"""Aqui intente definir la funcón softmax, pero no pude entrelazar con lo que me 
+arrojaba el codigo, para que tomara la ultima capa"""
+#def softmax(z,zs)
+#    return np.exp(z)/zs
