@@ -32,8 +32,8 @@ import numpy as np
 
 dataset=mnist.load_data()
 
-"""Convertimos estos datos en arrays y dividimos en conjuntos de entrenamiento y
-prueba.
+"""Convertimos estos datos en arrays y dividimos en conjuntos de entrenamiento
+y prueba.
 
 """
 
@@ -81,10 +81,10 @@ batch_size = 2
 **La primera red tendrá que ser equivalente a la que usaron en la tareaanterior.
 Es decir, de la misma arquitectura, función de costo y optimizador.  En principio
 se deberían obtener resultados semejantes, sin embargo la pregunta de este punto
-es:  ¿Obtuviste resultados similares?, ¿Tardó lo mismo para entrenar el mismo
-número de epocas?.En el reporte a entregar, hacer un comentario con respecto a
-las cuestiones anteriores.  Hacer commit y subir a git-hub.  En el reporte y en
-TEAMS subir el enlace al repositorio**
+es:  ¿Obtuviste resultados similares?, ¿Tardó lo mismo para entrenar el mismo número
+de epocas?.En el reporte a entregar, hacer un comentario con respecto a las
+cuestiones anteriores.  Hacer commit y subir a git-hub.  En el reporte y en TEAMS
+subir el enlace al repositorio**
 
 En el modelo de red neuronal anterior, definimos todas las funciones necesarias
 para realizar el paso hacia delante, hacia atras y la actualizacion de parametros
@@ -137,17 +137,60 @@ print("resultado correcto:")
 print(y_testc[1])
 
 #Para guardar el modelo en disco
-#model0.save("red.h5")
+model0.save("red.h5")
 
 #para cargar la red:
-#modelo_cargado = tf.keras.models.load_model('red.h5')
+modelo_cargado = tf.keras.models.load_model('red.h5')
 
-"""
-Vemos que existe una mejora de casi de 0.04 (En la red anterior se obtuvo 0.93 
+"""Vemos que existe una mejora de casi de 0.04 (En la red anterior se obtuvo 0.93
 y en esta 0.97), a pesar de que son resultados similares la diferencia es muy
-significativa, el tiempo de entrenamiento fue mayor puesto que eran mas datos 
-(lamentablemente no lo pude comprobar, ya que las últimas modificaciones que
- le hice a la red de la tarea anterior ya no me corrieron en la parte de la
- capa soft-max)
+    significativa, el tiempo de entrenamiento fue mayor (lamentablemente no lo
+pude comprobar, ya que las últimas modificaciones que le hice a la red de la
+tarea anterior ya no me corrieron en la parte de la capa soft-max)
 
 """
+
+
+
+"""## b) 3 Experimentos para intentar mejorar la eficiencia
+Hacer 3 experimentos mas para intentar mejorar la eficiencia de lared.  Es decir,
+aumenta capas o neuronas, puedes cambiar funcionesde activación y optimizador.  Es
+cuestión de tu creatividad.  No usarregularización en este ejercicio.  En cada
+experimento que hagas realiza un commit y sube el experimento a github con un
+comentario explicando si mejoró la eficiencia de la red o no. En el reporte
+explicarlos experimentos y comentar su eficiencia.
+
+**Modelo 1**
+
+Modificamos la activación para la capa intermedia, cambiamos sigmoid por relu,
+al igual en la capa de salida cambiamos sigmoid por softmax. También se modificó
+el tamaño de bache.\\
+"""
+
+model1 = Sequential()
+model1.add(Dense(784, activation='relu', input_shape=(784,)))
+model1.add(Dense(100, activation='relu'))
+model1.add(Dense(num_classes, activation='softmax'))  # Clasificación multiclase, num_classes es el número de clases
+model1.summary()
+
+#Clasificacion
+model1.compile(loss='mse',optimizer= SGD(learning_rate=learning_rate), metrics=['accuracy'])
+
+history = model1.fit(x_trainv, y_trainc,
+                    batch_size=10,
+                    epochs=10,
+                    verbose=1,
+                    validation_data=(x_testv, y_testc)
+                    )
+
+score = model1.evaluate(x_testv, y_testc, verbose=1) #evaluar la eficiencia del modelo
+print(score)
+a=model1.predict(x_testv) #predicción de la red entrenada
+print(a.shape)
+print(a[1])
+print("resultado correcto:")
+print(y_testc[1])
+
+"""Podemos observar que no mejoro la eficiencia respecto al modelo anterior,
+podemos ver que su eficiencia realmente es muy baja, la predicción es casi como
+lanzar un dado. """
