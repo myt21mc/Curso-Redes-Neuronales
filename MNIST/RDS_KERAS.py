@@ -194,3 +194,35 @@ print(y_testc[1])
 """Podemos observar que no mejoro la eficiencia respecto al modelo anterior,
 podemos ver que su eficiencia realmente es muy baja, la predicción es casi como
 lanzar un dado. """
+"""   
+**Modelo 2**
+Aquí modificamos el optimizador, usamos el optimizador Adam y también disminuimos la taza de aprendizaje, ya que se encontraba muy alta, la establecemos como 0.002, se cambió también el tamaño de batch y las épocas, ambas se aumentaron.
+"""
+
+model2 = Sequential()
+model2.add(Dense(784, activation='relu', input_shape=(784,)))
+model2.add(Dense(100, activation='relu'))
+model2.add(Dense(num_classes, activation='softmax'))  # Clasificación multiclase, num_classes es el número de clases
+model2.summary()
+
+from tensorflow.keras.optimizers import Adam
+#gradiente que tanto va a saltar entre cada iteración
+model2.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.002), metrics=['accuracy'])
+
+history = model2.fit(x_trainv, y_trainc,
+                    batch_size=30,
+                    epochs=20,
+                    verbose=1,
+                    validation_data=(x_testv, y_testc)
+                    )
+
+score = model2.evaluate(x_testv, y_testc, verbose=1) #evaluar la eficiencia del modelo
+print(score)
+a=model2.predict(x_testv) #predicción de la red entrenada
+print(a.shape)
+print(a[1])
+print("resultado correcto:")
+print(y_testc[1])
+
+"""La eficiencia no es mala, mejoro un 0.005, pero podemos lograr una mejor 
+eficiencia. 
