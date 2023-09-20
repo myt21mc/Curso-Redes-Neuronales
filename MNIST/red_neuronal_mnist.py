@@ -33,7 +33,7 @@ class Network(object): #clase conjunto de funciones
         for b, w in zip(self.biases, self.weights):
             z = np.dot(w, a) + b
             a = sigmoid(z) if w != self.weights[-1] else self.softmax(z) 
-        return a
+        return a.any()
     def softmax(self, z): 
         exp_z = np.exp(z - np.max(z))  # Subtracting the max value for numerical stability 
         return exp_z / exp_z.sum(axis=0, keepdims=True)
