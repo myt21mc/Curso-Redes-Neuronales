@@ -284,4 +284,4 @@ plt.show()
 """Mejoro la eficiencia del modelo del inciso a) en un 0.005; sin embargo, 
 vemos que existe una diferencia en la curva de precisión y de perdida para 
 los datos de entrenamiento y de prueba, esto quiere decir que existe un ligero 
-sobre ajuste en el modelo."""
+sobre ajuste en el modelo."""  
