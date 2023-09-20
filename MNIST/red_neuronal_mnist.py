@@ -165,5 +165,6 @@ def sigmoid_prime(z):
 
 """Aqui intente definir la funcón softmax, pero no pude entrelazar con lo que me 
 arrojaba el codigo, para que tomara la ultima capa"""
+"""Arriba si se implemento una función de la capa softmax pero aun habian errores"
 #def softmax(z,zs)
 #    return np.exp(z)/zs
