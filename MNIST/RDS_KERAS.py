@@ -284,4 +284,110 @@ plt.show()
 """Mejoro la eficiencia del modelo del inciso a) en un 0.005; sin embargo, 
 vemos que existe una diferencia en la curva de precisión y de perdida para 
 los datos de entrenamiento y de prueba, esto quiere decir que existe un ligero 
-sobre ajuste en el modelo."""  
+sobre ajuste en el modelo.
+
+
+## Implementación de regularizadores
+
+**De la mejor red que hayas entrenado del inciso anterior.  Continúaentrenando hasta que detectes sobre ajuste.  Posteriormente regresaa un estado de la red sin sobre entrenar y continúa entrenando peroahora con cada uno de las siguientes regularizaciones: \\
+•Primero:  regularización L1 \\
+•Segundo:  regularización L2 \\
+•Tercero:  regularización L1-L2 \\
+•Cuarto:  Dropout Dropout:  y L1 - L2**
+
+Notemos que el ultimo modelo del inciso b) es el que muestra una mejor eficiencia comparado con el del inciso a), como este modelo ya se encuentra sobreajustado haremos las modificaciones hasta encontrar un estado que no presente sobreajuste para poder implementar los regularizadores.
+"""
+
+model3c = Sequential()
+model3c.add(Dense(784, activation='relu', input_shape=(784,)))
+model3c.add(Dense(100, activation='relu'))
+model3c.add(Dense(num_classes, activation='softmax'))  # Clasificación multiclase, num_classes es el número de clases
+model3c.summary()
+
+from tensorflow.keras.optimizers import Adam
+
+model3c.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.009), metrics=['accuracy'])
+
+history = model3c.fit(x_trainv, y_trainc,
+                    batch_size=20,
+                    epochs=20,
+                    verbose=1,
+                    validation_data=(x_testv, y_testc)
+                    )
+
+score = model3c.evaluate(x_testv, y_testc, verbose=1) #evaluar la eficiencia del modelo
+print(score)
+a=model3.predict(x_testv) #predicción de la red entrenada
+print(a.shape)
+print(a[1])
+print("resultado correcto:")
+print(y_testc[1])
+
+# Visualizar las curvas de aprendizaje
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'], label='Entrenamiento')
+plt.plot(history.history['val_loss'], label='Validación')
+plt.title('Curva de Pérdida (Función de costo "Loss")')
+plt.xlabel('Épocas')
+plt.ylabel('Pérdida')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['accuracy'], label='Entrenamiento')
+plt.plot(history.history['val_accuracy'], label='Validación')
+plt.title('Curva de Precisión')
+plt.xlabel('Épocas')
+plt.ylabel('Precisión')
+plt.legend()
+
+plt.show()
+
+"""Ya no esta taaaaaan sobreajustado
+
+**•Primero:  regularización L1**
+"""
+
+#crear el modelo
+model3_l1 = Sequential()
+model3_l1.add(Dense(784, activation='relu', input_shape=(784,)))
+model3_l1.add(Dense(100, activation='relu', kernel_regularizer="l1"))
+model3_l1.add(Dense(num_classes, activation='softmax'))  # Clasificación multiclase, num_classes es el número de clases
+model3_l1.summary()
+
+# Compilar el modelo
+model3_l1.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+
+history = model3_l1.fit(x_trainv, y_trainc,
+                    batch_size=20,
+                    epochs=10,
+                    verbose=1,
+                    validation_data=(x_testv, y_testc)
+                    )
+
+# Visualizar las curvas de aprendizaje
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'], label='Entrenamiento')
+plt.plot(history.history['val_loss'], label='Validación')
+plt.title('Curva de Pérdida (Función de costo "Loss")')
+plt.xlabel('Épocas')
+plt.ylabel('Pérdida')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['accuracy'], label='Entrenamiento')
+plt.plot(history.history['val_accuracy'], label='Validación')
+plt.title('Curva de Precisión')
+plt.xlabel('Épocas')
+plt.ylabel('Precisión')
+plt.legend()
+
+plt.show()
+
+"Vemos que disminuyo considerablemente el sobreajuste, aumento su predicción."
