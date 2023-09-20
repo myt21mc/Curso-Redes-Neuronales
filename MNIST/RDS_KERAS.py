@@ -482,3 +482,54 @@ plt.show()
 """Vemos que se parece al caso uno, pues las lineas de prueba y entrenamiento 
 son muy parecidas. Sin embargo en este caso aumento más la predicción, pues aumento
 hasta un 0.02.""" 
+
+"""**•Cuarto:  Dropout Dropout:  y L1 - L2**"""
+
+#crear el modelo
+model3_l1l2d = Sequential()
+
+model3_l1l2d.add(Dense(784, activation='relu', input_shape=(784,)))
+model3_l1l2d.add(Dropout(0.2))
+
+model3_l1l2d.add(Dense(100, activation='relu', kernel_regularizer="l1_l2"))
+model3_l1l2d.add(Dropout(0.2))
+
+model3_l1l2d.add(Dense(num_classes, activation='softmax'))  # Clasificación multiclase, num_classes es el número de clases
+
+model3_l1l2d.summary()
+
+# Compilar el modelo
+model3_l1l2d.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+
+history = model3_l1l2d.fit(x_trainv, y_trainc,
+                    batch_size=20,
+                    epochs=10,
+                    verbose=1,
+                    validation_data=(x_testv, y_testc)
+                    )
+
+# Visualizar las curvas de aprendizaje
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'], label='Entrenamiento')
+plt.plot(history.history['val_loss'], label='Validación')
+plt.title('Curva de Pérdida (Función de costo "Loss")')
+plt.xlabel('Épocas')
+plt.ylabel('Pérdida')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['accuracy'], label='Entrenamiento')
+plt.plot(history.history['val_accuracy'], label='Validación')
+plt.title('Curva de Precisión')
+plt.xlabel('Épocas')
+plt.ylabel('Precisión')
+plt.legend()
+
+plt.show()
+
+"""Pero qué bonita, en los datos de validación, tiene una mayor precisión que 
+en los datos de entrenamiento, podría decir que es el mejor ajuste"""
