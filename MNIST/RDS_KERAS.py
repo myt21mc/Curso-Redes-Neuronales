@@ -226,3 +226,62 @@ print(y_testc[1])
 
 """La eficiencia no es mala, mejoro un 0.005, pero podemos lograr una mejor 
 eficiencia. 
+
+**Modelo 3**
+
+Aquí implementamos la funcion de costos categorical_crossentropy (en el caso anterior 
+tambien se hizo esto),aumentamos el pañamo de los batch y dismunuimos a 0.001
+la taza de aprendizaje
+"""
+
+model3 = Sequential()
+model3.add(Dense(784, activation='relu', input_shape=(784,)))
+model3.add(Dense(100, activation='relu'))
+model3.add(Dense(num_classes, activation='softmax'))  # Clasificación multiclase, num_classes es el número de clases
+model3.summary()
+
+from tensorflow.keras.optimizers import Adam
+
+model3.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.001), metrics=['accuracy'])
+
+history = model3.fit(x_trainv, y_trainc,
+                    batch_size=20,
+                    epochs=40,
+                    verbose=1,
+                    validation_data=(x_testv, y_testc)
+                    )
+
+score = model3.evaluate(x_testv, y_testc, verbose=1) #evaluar la eficiencia del modelo
+print(score)
+a=model3.predict(x_testv) #predicción de la red entrenada
+print(a.shape)
+print(a[1])
+print("resultado correcto:")
+print(y_testc[1])
+
+# Visualizar las curvas de aprendizaje
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.plot(history.history['loss'], label='Entrenamiento')
+plt.plot(history.history['val_loss'], label='Validación')
+plt.title('Curva de Pérdida (Función de costo "Loss")')
+plt.xlabel('Épocas')
+plt.ylabel('Pérdida')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(history.history['accuracy'], label='Entrenamiento')
+plt.plot(history.history['val_accuracy'], label='Validación')
+plt.title('Curva de Precisión')
+plt.xlabel('Épocas')
+plt.ylabel('Precisión')
+plt.legend()
+
+plt.show()
+
+"""Mejoro la eficiencia del modelo del inciso a) en un 0.005; sin embargo, 
+vemos que existe una diferencia en la curva de precisión y de perdida para 
+los datos de entrenamiento y de prueba, esto quiere decir que existe un ligero 
+sobre ajuste en el modelo."""
